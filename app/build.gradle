@@ -1,0 +1,40 @@
+apply plugin: 'com.android.application'
+apply plugin: 'jacoco'
+apply plugin: 'findbugs'
+
+android {
+    signingConfigs {
+        config {
+            keyAlias 'eln'
+            keyPassword 'eln123456'
+            storeFile file('elearning_key')
+            storePassword 'eln123456'
+        }
+    }
+    compileSdkVersion 21
+    buildToolsVersion "21.1.2"
+
+    defaultConfig {
+        applicationId "com.nd.demo.skillwisdom"
+        minSdkVersion 9
+        targetSdkVersion 21
+        versionCode 1
+        versionName "1.0"
+    }
+    buildTypes {
+        debug{
+            minifyEnabled false
+            shrinkResources false
+        }
+        release {
+            minifyEnabled true
+            shrinkResources true
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            signingConfig signingConfigs.config
+        }
+    }
+}
+
+dependencies {
+    compile fileTree(include: ['*.jar'], dir: 'libs')
+}
