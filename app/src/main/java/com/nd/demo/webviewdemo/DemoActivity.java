@@ -1,4 +1,4 @@
-package com.nd.demo.skillwisdom;
+package com.nd.demo.webviewdemo;
 
 import android.app.Activity;
 import android.content.Context;

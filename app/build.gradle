@@ -15,7 +15,7 @@ android {
     buildToolsVersion "21.1.2"
 
     defaultConfig {
-        applicationId "com.nd.demo.skillwisdom"
+        applicationId "com.nd.demo.webviewdemo"
         minSdkVersion 9
         targetSdkVersion 21
         versionCode 1

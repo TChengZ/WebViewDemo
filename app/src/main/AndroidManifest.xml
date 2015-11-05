@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.nd.demo.skillwisdom" >
+    package="com.nd.demo.webviewdemo" >
     <uses-sdk
         android:minSdkVersion="9"
         android:targetSdkVersion="21" />
@@ -14,7 +14,7 @@
         android:theme="@android:style/Theme.NoTitleBar"
         >
         <activity
-            android:name="com.nd.demo.skillwisdom.DemoActivity"
+            android:name="com.nd.demo.webviewdemo.DemoActivity"
             android:label="@string/app_name"
             android:hardwareAccelerated ="true"
             android:screenOrientation="landscape"
