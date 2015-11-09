@@ -5,10 +5,10 @@ apply plugin: 'findbugs'
 android {
     signingConfigs {
         config {
-            keyAlias 'eln'
-            keyPassword 'eln123456'
-            storeFile file('elearning_key')
-            storePassword 'eln123456'
+            keyAlias 'android.keystore'
+            keyPassword '123456'
+            storeFile file('android.keystore')
+            storePassword '123456'
         }
     }
     compileSdkVersion 21
