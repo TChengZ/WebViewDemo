@@ -188,8 +188,9 @@ public class DemoActivity extends Activity {
     }
 
 
-    private void play(){
-        mWebView.loadUrl("http://91yong.com/demo/ppt/index.html");
+    private void play(){//"http://91yong.com/demo/ppt/index.html";
+        String url = BuildConfig.URL;
+        mWebView.loadUrl(url);
     }
 
 
