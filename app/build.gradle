@@ -20,20 +20,13 @@ android {
         targetSdkVersion 21
         versionCode 1
         versionName "1.0"
-        buildConfigField "String", "web", "\"www.91yong.com\""
+        buildConfigField "String", "web", "\"http:\\\\www.91yong.com\""
         if (project.hasProperty('weburl')) {
             println "hasProperty"
-            buildConfigField "String", "web", "${weburl}"
-            println "${weburl}"
+            buildConfigField "String", "web", "\"${weburl}\""
         }
     }
-//    allprojects {
-//        gradle.projectsEvaluated {
-//            tasks.withType(JavaCompile) {
-//                options.compilerArgs << "-Xlint:unchecked" << "-Xlint:deprecation"
-//            }
-//        }
-//    }
+
     buildTypes {
         debug{
             minifyEnabled false
@@ -45,6 +38,10 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
             signingConfig signingConfigs.config
         }
+    }
+
+    lintOptions {
+        abortOnError false
     }
 }
 
