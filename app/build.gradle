@@ -1,3 +1,5 @@
+import java.nio.charset.Charset
+
 apply plugin: 'com.android.application'
 apply plugin: 'jacoco'
 apply plugin: 'findbugs'
@@ -21,9 +23,18 @@ android {
         versionCode 1
         versionName "1.0"
         buildConfigField "String", "web", "\"http:\\\\www.91yong.com\""
-        if (project.hasProperty('weburl')) {
-            println "hasProperty"
-            buildConfigField "String", "web", "\"${weburl}\""
+        if (project.hasProperty('webUrl')) {
+            println "weburl:${webUrl}"
+            buildConfigField "String", "web", "\"${webUrl}\""
+        }
+        if (project.hasProperty('packageName')) {
+            println "packageName:${packageName}"
+            //正则表达式判断包名只能有英文字母
+            def matcher = packageName=~/A-Za-z/
+            if(matcher.find()){
+                applicationId "com.nd.demo.webviewdemo" + ".${packageName}"
+                println "applicationId:${applicationId}"
+            }
         }
     }
 
@@ -42,6 +53,33 @@ android {
 
     lintOptions {
         abortOnError false
+    }
+
+    android.applicationVariants.all { variant ->
+        //修改@strng/app_name
+        variant.mergeResources.doLast {
+            def encoding = Charset.forName("UTF-8").toString();//xml布局文件使用UTF-8编码
+            def f = file("${buildDir}/intermediates/res/${variant.dirName}/values/values.xml")
+            String content = f.getText(encoding)
+            if (project.hasProperty('appName')){
+                def app_name = "<string name=\"app_name\">original_app_name</string>"
+                println "original_app_name:${app_name}"
+                def new_app_name = "<string name=\"app_name\">" + "${appName}" + "</string>"
+                content = content.replaceAll(app_name, new_app_name)
+                f.write(content, encoding)
+            }
+        }
+        //修改apk文件名（加上后缀时间）
+        variant.outputs.each { output ->
+            def outputFile = output.outputFile
+            if (outputFile != null && outputFile.name.endsWith('.apk')) {
+                def fileName = outputFile.name;
+                def today = new Date().format('yy-MM-dd_HHmm');
+                fileName = fileName.replace(".apk", "_${today}.apk")
+                output.outputFile = new File(outputFile.parent, fileName)
+                println "输出文件位置： " + output.outputFile
+            }
+        }
     }
 }
 
