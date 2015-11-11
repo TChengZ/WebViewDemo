@@ -6,9 +6,15 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
+import android.view.KeyEvent;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
+import android.view.inputmethod.EditorInfo;
+import android.view.inputmethod.InputMethodManager;
 import android.webkit.DownloadListener;
 import android.webkit.GeolocationPermissions;
 import android.webkit.WebChromeClient;
@@ -16,9 +22,17 @@ import android.webkit.WebSettings;
 import android.webkit.WebStorage;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
+import android.widget.EditText;
+import android.widget.TextView;
 
 
 public class DemoActivity extends Activity {
+
+    private static final String TAG = "DemoActivity";
+
+    private static final int MENU_URL = 0;
+
+    private EditText mEtWeb = null;
 
     private WebView mWebView = null;
 
@@ -177,19 +191,39 @@ public class DemoActivity extends Activity {
         setContentView(R.layout.activity_demo);
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         mWebView = (WebView) findViewById(R.id.webview);
+        mEtWeb = (EditText) findViewById(R.id.ed_web);
         mWebView.setDownloadListener(new MyWebViewDownLoadListener());
-        //设置webView可以使用Javascript
-        mWebView.getSettings().setJavaScriptEnabled(true);
         initSettings();
+        initEditText();
         if(android.os.Build.VERSION.SDK_INT > 17) {
             mWebView.getSettings().setMediaPlaybackRequiresUserGesture(false);
         }
-        play();
+        play(BuildConfig.web);
     }
 
+    /**
+     * 初始化输入框相关设置
+     */
+    private void initEditText(){
+        mEtWeb.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                if (actionId == EditorInfo.IME_ACTION_SEND) {
+                    play(mEtWeb.getText().toString().trim());
+                    mEtWeb.setVisibility(View.GONE);
+                    InputMethodManager inputManager =
+                            (InputMethodManager)DemoActivity.this.getSystemService(
+                                    Context.INPUT_METHOD_SERVICE);
+                    inputManager.toggleSoftInput(0, InputMethodManager.HIDE_NOT_ALWAYS);
+                    return true;
+                }
+                return false;
+            }
+        });
+    }
 
-    private void play(){
-        String url = BuildConfig.web;
+    private void play(String url){
+        Log.d(TAG, "url:" + url);
         mWebView.loadUrl(url);
     }
 
@@ -217,5 +251,24 @@ public class DemoActivity extends Activity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        if(BuildConfig.DEBUG) {
+            menu.add(0, MENU_URL, 0, "webURL");
+        }
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch(item.getItemId())
+        {
+            case MENU_URL:
+                mEtWeb.setVisibility(View.VISIBLE);
+                break;
+        }
+        return true;
     }
 }

@@ -29,7 +29,7 @@ android {
         }
         if (project.hasProperty('packageName')) {
             println "packageName:${packageName}"
-            //正则表达式判断包名只能有英文字母
+            //正则表达式判断包名只能有英文字母以及数字
             def matcher = packageName==~/^[a-zA-Z0-9]+$/
             if(matcher.find()){
                 applicationId "com.nd.demo.webviewdemo" + ".${packageName}"
@@ -58,10 +58,10 @@ android {
     android.applicationVariants.all { variant ->
         //修改@strng/app_name
         variant.mergeResources.doLast {
-            def encoding = Charset.forName("UTF-8").toString();//xml布局文件使用UTF-8编码
-            def f = file("${buildDir}/intermediates/res/${variant.dirName}/values/values.xml")
-            String content = f.getText(encoding)
             if (project.hasProperty('appName')){
+                def encoding = Charset.forName("UTF-8").toString();//xml布局文件使用UTF-8编码
+                def f = file("${buildDir}/intermediates/res/${variant.dirName}/values/values.xml")
+                String content = f.getText(encoding)
                 def app_name = "<string name=\"app_name\">original_app_name</string>"
                 println "original_app_name:${app_name}"
                 def new_app_name = "<string name=\"app_name\">" + "${appName}" + "</string>"
@@ -73,7 +73,7 @@ android {
         //修改apk文件名（加上后缀时间）
         variant.outputs.each { output ->
             def outputFile = output.outputFile
-            if (outputFile != null && outputFile.name.endsWith('.apk')) {
+            if (outputFile != null && outputFile.name.endsWith('.apk') && outputFile.name.contains("release")) {
                 def fileName = outputFile.name;
                 def today = new Date().format('yy-MM-dd_HHmm');
                 fileName = fileName.replace(".apk", "_${today}.apk")
