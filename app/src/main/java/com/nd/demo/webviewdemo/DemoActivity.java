@@ -211,15 +211,28 @@ public class DemoActivity extends Activity {
                 if (actionId == EditorInfo.IME_ACTION_SEND) {
                     play(mEtWeb.getText().toString().trim());
                     mEtWeb.setVisibility(View.GONE);
-                    InputMethodManager inputManager =
-                            (InputMethodManager)DemoActivity.this.getSystemService(
-                                    Context.INPUT_METHOD_SERVICE);
-                    inputManager.toggleSoftInput(0, InputMethodManager.HIDE_NOT_ALWAYS);
                     return true;
                 }
                 return false;
             }
         });
+        mEtWeb.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                if (!hasFocus) {
+                    dismissEditText();
+                }
+            }
+        });
+    }
+
+    private void dismissEditText(){
+        mEtWeb.setVisibility(View.GONE);
+        mEtWeb.clearFocus();
+        InputMethodManager inputManager =
+                (InputMethodManager)DemoActivity.this.getSystemService(
+                        Context.INPUT_METHOD_SERVICE);
+        inputManager.hideSoftInputFromInputMethod(mEtWeb.getWindowToken(), 0);
     }
 
     private void play(String url){
@@ -267,6 +280,7 @@ public class DemoActivity extends Activity {
         {
             case MENU_URL:
                 mEtWeb.setVisibility(View.VISIBLE);
+                mEtWeb.requestFocus();
                 break;
         }
         return true;
