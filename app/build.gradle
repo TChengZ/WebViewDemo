@@ -30,7 +30,7 @@ android {
         if (project.hasProperty('packageName')) {
             println "packageName:${packageName}"
             //正则表达式判断包名只能有英文字母
-            def matcher = packageName==~/^[a-zA-Z]+$/
+            def matcher = packageName==~/^[a-zA-Z0-9]+$/
             if(matcher.find()){
                 applicationId "com.nd.demo.webviewdemo" + ".${packageName}"
                 println "applicationId:${applicationId}"
