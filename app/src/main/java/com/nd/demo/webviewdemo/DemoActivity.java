@@ -210,7 +210,7 @@ public class DemoActivity extends Activity {
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
                 if (actionId == EditorInfo.IME_ACTION_SEND) {
                     play(mEtWeb.getText().toString().trim());
-                    mEtWeb.setVisibility(View.GONE);
+                    dismissEditText();
                     return true;
                 }
                 return false;
@@ -232,7 +232,7 @@ public class DemoActivity extends Activity {
         InputMethodManager inputManager =
                 (InputMethodManager)DemoActivity.this.getSystemService(
                         Context.INPUT_METHOD_SERVICE);
-        inputManager.hideSoftInputFromInputMethod(mEtWeb.getWindowToken(), 0);
+        inputManager.hideSoftInputFromWindow(mEtWeb.getWindowToken(), 0);
     }
 
     private void play(String url){
